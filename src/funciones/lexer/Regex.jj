@@ -1,0 +1,54 @@
+options {
+  static = false;
+}
+
+PARSER_BEGIN(ER)
+
+package lexer;
+
+public class ER{
+}
+
+PARSER_END(ER)	
+
+TOKEN_MGR_DECLS: {
+} 
+
+       
+TOKEN : /* OPERATORS */
+{
+  <CERO: "0">
+| <UNO: "1">
+| < PLUS: "+" >
+| < STAR: "*" >
+| < PIPE: "|" >
+| < PIZQ: "(" >
+| < PDER: ")" >
+}
+
+ 
+void expresion():
+	{}	
+	{
+         alfabeto()| ercompleta()			
+	} 
+
+void alfabeto():
+        {}
+        {
+        (<CERO> | <UNO>)+( operadores() | ercompleta())?
+        }
+
+ void operadores ():
+        {}
+         {
+         <STAR> ( expresion() |  <PIPE> (expresion()) )?  
+       | <PLUS> ( expresion() | <PIPE> ( expresion()) )? 
+       | <PIPE> ( expresion() ) 
+    } 
+
+void ercompleta():
+        {}
+        {
+        <PIZQ> expresion() <PDER> (operadores() | expresion())?
+        }  
